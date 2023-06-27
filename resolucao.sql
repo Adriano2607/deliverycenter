@@ -19,13 +19,17 @@ ON drivers.driver_id = deliveries.driver_id GROUP BY drivers.driver_type
 ORDER BY numberAmount DESC LIMIT 1;
 
 -- 6 - Qual a distância média das entregas por tipo de driver (driver_modal)? 
-SELECT AVG(delivery_distance_meters) AS averageDistance, driver_modal FROM drivers 
-INNER JOIN deliveries ON drivers.driver_id = deliveries.driver_id GROUP BY drivers.driver_modal 
+SELECT AVG(delivery_distance_meters) AS averageDistance, driver_modal
+FROM drivers
+LEFT JOIN deliveries ON drivers.driver_id = deliveries.driver_id
+GROUP BY drivers.driver_modal
 ORDER BY averageDistance DESC;
 
 -- 7 - Qual a média de valor de pedido (order_amount) por loja, em ordem decrescente? 
-SELECT AVG(order_amount) AS averageAmount, store_name FROM stores INNER JOIN orders 
-ON stores.store_id = orders.store_id GROUP BY stores.store_id, store_name 
+SELECT AVG(orders.order_amount) AS averageAmount, stores.store_name
+FROM stores
+RIGHT JOIN orders ON stores.store_id = orders.store_id
+GROUP BY stores.store_id, stores.store_name
 ORDER BY averageAmount DESC;
 
 -- 8 - Existem pedidos que não estão associados a lojas? Se caso positivo, quantos? 
